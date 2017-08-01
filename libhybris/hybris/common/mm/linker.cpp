@@ -977,7 +977,11 @@ template<typename F>
 static bool walk_dependencies_tree(soinfo* root_soinfos[], size_t root_soinfos_size, bool do_shims, F action) {
   SoinfoLinkedList visit_list;
   SoinfoLinkedList visited;
-
+  // Fix shims
+  if (!getauxval(AT_SECURE)) {
+    parse_LD_SHIM_LIBS(getenv("HYBRIS_LD_SHIM_LIBS"));
+  }
+  // I hope...
   for (size_t i = 0; i < root_soinfos_size; ++i) {
     visit_list.push_back(root_soinfos[i]);
   }
